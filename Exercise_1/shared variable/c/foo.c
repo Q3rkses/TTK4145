@@ -5,18 +5,24 @@
 #include <stdio.h>
 
 int i = 0;
+pthread_mutex_t i_lock;
+
 
 // Note the return type: void*
 void* incrementingThreadFunction(){
     for (int j = 0; j < 1000000; j++) {
+        pthread_mutex_lock(&i_lock);
         i++;
+        pthread_mutex_unlock(&i_lock);
     }
     return NULL;
 }
 
 void* decrementingThreadFunction(){
-    for (int j = 0; j < 1000000; j++) {
+    for (int j = 0; j < 1042069; j++) {
+        pthread_mutex_lock(&i_lock);
         i--;
+        pthread_mutex_unlock(&i_lock);
     }
     return NULL;
 }
@@ -26,6 +32,7 @@ int main(){
     
     pthread_t incrementingThread;
     pthread_t decrementingThread;
+    pthread_mutex_init(&i_lock, NULL);
 
     pthread_create(&incrementingThread, NULL, incrementingThreadFunction, NULL);  
     pthread_create(&decrementingThread, NULL, decrementingThreadFunction, NULL);
@@ -33,7 +40,7 @@ int main(){
     pthread_join(incrementingThread, NULL);
     pthread_join(decrementingThread, NULL);
 
-    // Get race condition if we create and dont join afterwards, since the threads will run in parallel
+    pthread_mutex_destroy(&i_lock);
     
     printf("The magic number is: %d\n", i);
     return 0;
