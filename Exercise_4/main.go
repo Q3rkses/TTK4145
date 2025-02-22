@@ -26,7 +26,6 @@ func main() {
 }
 
 func Remember(memory *uint32, message []byte) {
-	fmt.Println("Died here")
 	*memory = binary.LittleEndian.Uint32(message)
 	fmt.Println("Remembered: ", *memory)
 }
