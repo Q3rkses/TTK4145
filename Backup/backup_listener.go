@@ -1,46 +1,50 @@
-package main
+package backup
 
-// import (
-// 	"fmt"
-// )
-
-var (
-	ipaddress string = "10.100.23.23"
-	password  string = "Sanntid15"
-	// customFlag        = "--Backup"
+import (
+	"flag"
+	"sync"
+	//elevalgo "sanntidslab/elev_al_go"
+	//timer "sanntidslab/elev_al_go/timer"
+	//networking "sanntidslab/network"
 )
 
-// type Backup struct {
-// 	targetIP string
-// 	password string
-// 	AliveLock *sync.Mutex
-// 	BackupView []elevalgo.Elevator
-// }
+type Backup struct {
+	primaryIP string
+	password  string
+	AliveLock *sync.Mutex
+	//BackupView []elevalgo.Elevator                               ----spør david hva faen dette er
+}
 
-// func checkExistence(targetIP string, password string) {
+func backupFunctionality(backup *Backup) {
+	// GOAL OF FUNCTION: if the listener detects that main is ded, revive. if alive update backupView
 
-// 	// Check if the backup is already running, and if not start it up
-// 	exitCodes, err := AlreadyRunning("backup", "localhost", "password")
-// 	if err != nil {
-// 		fmt.Printf("Failed to query: %v", err)
-// 	} else if exitCodes == 0 {
-// 		fmt.Println("Backup is already running, (remembering data ?)")
-// 	} else {
-// 		createBackupListener(targetIP, password)
-// 	}
+	// while timer not expired {
+	// 1. read lifesignal of targetIP
 
-// 	fmt.Println("Creating backup")
-// }
+	// 2.1 if lifesignal not recieved within timeout, revive TargetIP
 
-// func createBackupListener(targetIP string, password string) {
-// 	// Create a backup listener
-// 	// This will listen for a message from the primary server
-// }
+	// 2.2 if lifesignal recieved, update backupView
+	//}
 
-// func backupFunctionality() {
-// 	// if the listener detects that main is ded, revive it
-// }
+}
 
 func main() {
-	Revive("localhost", password)
+	var node string
+	flag.StringVar(&node, "node", "", "flag to be able to tell if program has backup running")
+
+	var hostIP string
+	flag.StringVar(&hostIP, "hostIP", hostIP, "Get hostIP from flag")
+
+	flag.Parse()
+
+	backup := Backup{
+		primaryIP: hostIP,
+		password:  "password",
+		AliveLock: &sync.Mutex{},
+		//BackupView: []elevalgo.Elevator{},                               ----spør david hva faen dette er
+	}
+
+	for {
+		backupFunctionality(&backup)
+	}
 }
